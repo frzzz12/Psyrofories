@@ -136,12 +136,13 @@
       display: flex; align-items: center; gap: 8px;
     }
     .nav-links a {
-      padding: 10px 18px;
+      padding: 10px 14px;
       border-radius: 99px;
-      font-size: .85rem; font-weight: 600;
+      font-size: .82rem; font-weight: 600;
       color: rgba(255,255,255,.9);
       transition: var(--transition);
       position: relative;
+      white-space: nowrap;
     }
     #navbar.scrolled .nav-links a { color: var(--text-mid); }
     .nav-links a:not(.nav-cta)::after {
@@ -633,14 +634,37 @@
     .figure-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 50px rgba(44,82,130,.2); border-color: transparent;}
     .figure-card:hover::before { opacity: 1; }
     .figure-avatar {
-      width: 110px; height: 110px; border-radius: 50%;
+      width: 120px; height: 120px; border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 25px rgba(44,82,130,.2);
+      transition: var(--transition-smooth);
+      border: 4px solid #fff;
       background: var(--blue-50);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; margin: 0 auto 20px;
-      box-shadow: 0 10px 25px rgba(44,82,130,.15);
-      transition: var(--transition-smooth); border: 4px solid #fff;
     }
-    .figure-card:hover .figure-avatar { background: #fff; transform: scale(1.1); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+    .figure-avatar img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      display: block;
+      filter: grayscale(20%);
+      transition: var(--transition-smooth);
+    }
+    .figure-card:hover .figure-avatar { transform: scale(1.1); box-shadow: 0 15px 40px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.6); }
+    .figure-card:hover .figure-avatar img { filter: grayscale(0%); }
+
+    /* Figure card entrance animation */
+    @keyframes figureIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0)  scale(1); }
+    }
+    .figure-card {
+      animation: figureIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .figure-card:nth-child(1) { animation-delay: 0.1s; }
+    .figure-card:nth-child(2) { animation-delay: 0.15s; }
+    .figure-card:nth-child(3) { animation-delay: 0.2s; }
+    .figure-card:nth-child(4) { animation-delay: 0.25s; }
+    .figure-card:nth-child(5) { animation-delay: 0.3s; }
+    .figure-card:nth-child(6) { animation-delay: 0.35s; }
     .figure-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); transition: var(--transition);}
     .figure-card:hover .figure-name { color: #fff; }
     .figure-era { font-size: .85rem; color: var(--text-light); margin-bottom: 16px; transition: var(--transition); font-weight: 500;}
@@ -684,10 +708,12 @@
     }
     .modal-close:hover { background: #fff; color: var(--blue-700); transform: rotate(90deg) scale(1.1); }
     .modal-avatar {
-      width: 100px; height: 100px; background: rgba(255,255,255,.2);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; margin: 0 auto 20px; border: 4px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 110px; height: 110px;
+      border-radius: 50%; overflow: hidden;
+      margin: 0 auto 20px; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,.2);
     }
+    .modal-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
     .modal-name { font-family: var(--font-display); font-size: 2.2rem; color: #fff; font-weight: 700; line-height: 1;}
     .modal-era { color: var(--blue-200); font-size: 1rem; margin-top: 8px; font-weight: 600; letter-spacing: 1px;}
     .modal-body { padding: 40px; }
@@ -711,7 +737,8 @@
     #disorders { background: #fff; position: relative; }
     .disorder-tabs {
       display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; justify-content: center;
-      background: var(--blue-50); padding: 10px; border-radius: 99px; width: max-content; margin-left: auto; margin-right: auto;
+      background: var(--blue-50); padding: 10px; border-radius: var(--radius-md);
+      max-width: 100%; margin-left: auto; margin-right: auto;
     }
     .disorder-tab {
       padding: 12px 28px; border-radius: 99px; font-size: 1rem; font-weight: 700;
@@ -892,7 +919,7 @@
     #mindfulness .section-title { color: #fff; }
     #mindfulness .section-subtitle { color: rgba(255,255,255,.8); font-weight: 300; }
     
-    .breath-method-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 99px; backdrop-filter: blur(10px); width: max-content; margin-inline: auto;}
+    .breath-method-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 50px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 99px; backdrop-filter: blur(10px); max-width: 100%; margin-inline: auto; box-sizing: border-box;}
     .breath-method-tab { padding: 12px 24px; border-radius: 99px; font-size: .9rem; font-weight: 700; color: rgba(255,255,255,.7); transition: var(--transition); letter-spacing: 1px;}
     .breath-method-tab.active { background: #fff; color: var(--blue-700); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .breath-method-tab:hover:not(.active) { color: #fff; }
@@ -1085,38 +1112,119 @@
     /* ============================================================
        RESPONSIVE
     ============================================================ */
+
+    /* --- Tablet Landscape (≤1024px) --- */
     @media (max-width: 1024px) {
-      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
-    }
-    @media (max-width: 900px) {
       .nav-links { display: none; }
       #hamburger { display: flex; }
-      .hero-visual { display: none; }
-      .hero-content { max-width: 100%; text-align: center; }
-      .hero-badge, .hero-buttons { justify-content: center; }
-      .hero-stats { justify-content: center; }
-      .hero-stat::after { display: none; }
-      .disorder-content { grid-template-columns: 1fr; }
-      .journal-layout { grid-template-columns: 1fr; }
-      .selfcare-layout { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 600px) {
-      section { padding: 80px 5%; }
-      .hero-stats { gap: 30px; flex-wrap: wrap; }
-      .hero-title { font-size: 2.5rem; }
-      .myth-grid, .figures-grid, .edu-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .breath-container { width: 250px; height: 250px; }
-      .breath-ring-1 { width: 250px; height: 250px; }
-      .breath-ring-2 { width: 210px; height: 210px; }
-      .breath-ring-3 { width: 170px; height: 170px; }
-      .breath-circle { width: 130px; height: 130px; }
-      .selfcare-progress-card { flex-direction: column; text-align: center; gap: 20px;}
-      .selfcare-reset { margin: 0 auto; }
-      .quiz-wrap { padding: 30px 20px; }
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+      .hero-title { font-size: 3.5rem; }
+      .figures-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
+    /* --- Tablet Portrait (≤768px) --- */
+    @media (max-width: 768px) {
+      section { padding: 70px 6%; }
+
+      .hero-visual { display: none; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-badge { justify-content: center; }
+      .hero-buttons { justify-content: center; flex-wrap: wrap; gap: 14px; }
+      .hero-stats { justify-content: center; gap: 24px; flex-wrap: wrap; }
+      .hero-stat::after { display: none; }
+      .hero-title { font-size: 2.8rem; }
+      .hero-desc { font-size: 1.05rem; }
+
+      .section-title { font-size: 2.2rem; }
+      .section-desc { font-size: 1rem; }
+
+      .edu-grid { grid-template-columns: repeat(2, 1fr); }
+      .myth-grid { grid-template-columns: repeat(2, 1fr); }
+      .figures-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+      .disorder-content { grid-template-columns: 1fr; }
+      .disorder-tabs { width: 100%; border-radius: var(--radius-md); flex-wrap: wrap; justify-content: center; }
+      .disorder-tab { flex: 1 1 auto; text-align: center; padding: 10px 16px; font-size: 0.9rem; }
+
+      .journal-layout { grid-template-columns: 1fr; }
+      .selfcare-layout { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+
+      .myth-card { height: 300px; }
+    }
+
+    /* --- Mobile (≤480px) --- */
+    @media (max-width: 480px) {
+      section { padding: 55px 5%; }
+
+      .hero-title { font-size: 2rem; line-height: 1.2; }
+      .hero-desc { font-size: 0.95rem; }
+      .hero-buttons { flex-direction: column; width: 100%; gap: 12px; }
+      .hero-buttons .btn-primary,
+      .hero-buttons .btn-secondary { width: 100%; justify-content: center; }
+      .hero-stats { gap: 16px; }
+      .hero-stat-num { font-size: 1.8rem; }
+
+      .section-title { font-size: 1.75rem; }
+      .section-desc { font-size: 0.9rem; }
+
+      .edu-grid { grid-template-columns: 1fr; }
+      .myth-grid { grid-template-columns: 1fr; }
+      .figures-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .figure-card { padding: 24px 16px; }
+      .figure-avatar { width: 90px; height: 90px; }
+      .figure-name { font-size: 1.1rem; }
+
+      .disorder-tab { font-size: 0.85rem; padding: 8px 12px; flex: 1 1 auto; min-width: 0; text-align: center; }
+
+      .breath-method-tabs { gap: 8px; padding: 6px; border-radius: var(--radius-md); }
+      .breath-method-tab { padding: 10px 16px; font-size: 0.82rem; letter-spacing: 0.5px; flex: 1 1 auto; text-align: center; }
+
+      .mood-options { gap: 8px; flex-wrap: wrap; justify-content: center; }
+      .mood-btn { width: 52px; height: 52px; font-size: 1.6rem; }
+
+      .mood-tracker-wrap,
+      .journal-editor,
+      .journal-list-section,
+      .quiz-wrap,
+      .selfcare-column { padding: 22px 14px; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
+      .breath-container,
+      .breath-ring-1 { width: 210px; height: 210px; }
+      .breath-ring-2 { width: 170px; height: 170px; }
+      .breath-ring-3 { width: 130px; height: 130px; }
+      .breath-circle { width: 90px; height: 90px; font-size: 0.9rem; }
+
+      .selfcare-progress-card { flex-direction: column; text-align: center; gap: 14px; padding: 18px; }
+      .selfcare-reset { margin: 0 auto; width: 100%; justify-content: center; }
+      .selfcare-item { padding: 11px 13px; }
+
+      .modal-overlay { padding: 12px; }
+      .modal-box { border-radius: var(--radius-md); }
+      .modal-header { padding: 24px 18px; }
+      .modal-body { padding: 18px; }
+      .modal-name { font-size: 1.7rem; }
+      .modal-avatar { width: 90px; height: 90px; }
+      .modal-quote { font-size: 1rem; padding: 16px 18px; }
+
+      .quiz-options { grid-template-columns: 1fr; }
+      .quiz-option { padding: 14px 16px; font-size: 0.95rem; }
+
+      #toast-container { right: 14px; left: 14px; bottom: 16px; align-items: center; }
+      .toast { width: 100%; max-width: unset; padding: 11px 14px; font-size: 0.88rem; justify-content: center; }
+
+      #back-to-top { bottom: 16px; left: 16px; width: 42px; height: 42px; font-size: 1.1rem; }
+    }
+
+    /* --- Small Mobile (≤360px) --- */
+    @media (max-width: 360px) {
+      .hero-title { font-size: 1.75rem; }
+      .figures-grid { grid-template-columns: 1fr; }
+      .figure-card { padding: 20px 14px; }
+    }
     /* scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #F8FCFF; }
@@ -1651,12 +1759,12 @@ const MYTH_FACTS = [
 ];
 
 const FIGURES = [
-  { emoji: "🛋️", name: "Sigmund Freud", era: "1856–1939 | Austria", theory: "Psikoanalisis", bio: "Bapak psikoanalisis yang kontroversial. Mengubah cara dunia memandang alam bawah sadar, mimpi, dan trauma masa kecil.", contribution: "Mengenalkan Id, Ego, Superego; mekanisme pertahanan diri; dan menjadikan 'terapi bicara' (talk therapy) sebagai standar medis.", quote: "\"Pikiran itu seperti gunung es, ia mengapung dengan hanya sepertujuh dari massanya yang berada di atas air.\"" },
-  { emoji: "🌌", name: "Carl Jung", era: "1875–1961 | Swiss", theory: "Psikologi Analitis", bio: "Mantan murid Freud yang memisahkan diri. Ia menggabungkan psikologi mendalam dengan mitologi, agama, dan filsafat timur.", contribution: "Pencetus konsep Introvert/Ekstrovert, Ketidaksadaran Kolektif, Arketipe (Shadow, Persona), dan Sinkronisitas. Teori MBTI lahir dari pemikirannya.", quote: "\"Sampai kamu menyadari ketidaksadaranmu, itu akan mengarahkan hidupmu dan kamu akan menyebutnya takdir.\"" },
-  { emoji: "🔺", name: "Abraham Maslow", era: "1908–1970 | Amerika", theory: "Psikologi Humanistik", bio: "Ia menolak fokus pada penyakit mental, dan memilih mempelajari orang-orang paling sehat dan sukses untuk memahami potensi penuh manusia.", contribution: "Pencipta 'Hierarki Kebutuhan' yang ikonik. Ia meletakkan dasar bagi psikologi positif dan manajemen modern berpusat pada manusia.", quote: "\"Seseorang bisa memilih untuk melangkah mundur menuju keamanan atau maju menuju pertumbuhan.\"" },
-  { emoji: "🧩", name: "Jean Piaget", era: "1896–1980 | Swiss", theory: "Perkembangan Kognitif", bio: "Seorang ahli biologi yang terpesona oleh kesalahan sistematis anak-anak saat tes IQ, menyadari bahwa anak-anak berpikir dengan cara yang secara fundamental berbeda dari orang dewasa.", contribution: "Mengidentifikasi 4 tahap emas perkembangan kognitif anak. Ia mengubah wajah pendidikan modern yang beralih dari hapalan ke penemuan aktif.", quote: "\"Tujuan pendidikan bukanlah meningkatkan jumlah pengetahuan, tapi menciptakan kemungkinan bagi anak untuk menemukan.\"" },
-  { emoji: "🔔", name: "Ivan Pavlov", era: "1849–1936 | Rusia", theory: "Classical Conditioning", bio: "Ia memenangkan Nobel Fisiologi atas riset pencernaannya. Secara tidak sengaja, anjing-anjing labnya membawanya pada penemuan psikologis terbesar abad ke-20.", contribution: "Membuktikan bahwa respons tubuh bisa dikondisikan (diasosiasikan) melalui stimulus. Konsep dasarnya dipakai dalam terapi fobia dan kecemasan hingga kini.", quote: "\"Jangan menjadi arsiparis fakta, jadilah penjelajah misterinya.\"" },
-  { emoji: "⚙️", name: "B.F. Skinner", era: "1904–1990 | Amerika", theory: "Behaviorisme Radikal", bio: "Ilmuwan paling berpengaruh di abad 20. Ia percaya 'kehendak bebas' adalah ilusi dan semua perilaku manusia dibentuk oleh lingkungannya.", contribution: "Pencetus Operant Conditioning (Reward & Punishment). Aplikasinya digunakan luas dari pendidikan sekolah, desain game, hingga algoritma media sosial saat ini.", quote: "\"Konsekuensi dari suatu tindakan menentukan probabilitas tindakan tersebut diulangi.\"" },
+  { photo: "images/freud.png", name: "Sigmund Freud", era: "1856–1939 | Austria", theory: "Psikoanalisis", bio: "Bapak psikoanalisis yang kontroversial. Mengubah cara dunia memandang alam bawah sadar, mimpi, dan trauma masa kecil.", contribution: "Mengenalkan Id, Ego, Superego; mekanisme pertahanan diri; dan menjadikan 'terapi bicara' (talk therapy) sebagai standar medis.", quote: "\"Pikiran itu seperti gunung es, ia mengapung dengan hanya sepertujuh dari massanya yang berada di atas air.\"" },
+  { photo: "images/jung.png", name: "Carl Jung", era: "1875–1961 | Swiss", theory: "Psikologi Analitis", bio: "Mantan murid Freud yang memisahkan diri. Ia menggabungkan psikologi mendalam dengan mitologi, agama, dan filsafat timur.", contribution: "Pencetus konsep Introvert/Ekstrovert, Ketidaksadaran Kolektif, Arketipe (Shadow, Persona), dan Sinkronisitas. Teori MBTI lahir dari pemikirannya.", quote: "\"Sampai kamu menyadari ketidaksadaranmu, itu akan mengarahkan hidupmu dan kamu akan menyebutnya takdir.\"" },
+  { photo: "images/maslow.png", name: "Abraham Maslow", era: "1908–1970 | Amerika", theory: "Psikologi Humanistik", bio: "Ia menolak fokus pada penyakit mental, dan memilih mempelajari orang-orang paling sehat dan sukses untuk memahami potensi penuh manusia.", contribution: "Pencipta 'Hierarki Kebutuhan' yang ikonik. Ia meletakkan dasar bagi psikologi positif dan manajemen modern berpusat pada manusia.", quote: "\"Seseorang bisa memilih untuk melangkah mundur menuju keamanan atau maju menuju pertumbuhan.\"" },
+  { photo: "images/piaget.png", name: "Jean Piaget", era: "1896–1980 | Swiss", theory: "Perkembangan Kognitif", bio: "Seorang ahli biologi yang terpesona oleh kesalahan sistematis anak-anak saat tes IQ, menyadari bahwa anak-anak berpikir dengan cara yang secara fundamental berbeda dari orang dewasa.", contribution: "Mengidentifikasi 4 tahap emas perkembangan kognitif anak. Ia mengubah wajah pendidikan modern yang beralih dari hapalan ke penemuan aktif.", quote: "\"Tujuan pendidikan bukanlah meningkatkan jumlah pengetahuan, tapi menciptakan kemungkinan bagi anak untuk menemukan.\"" },
+  { photo: "images/pavlov.png", name: "Ivan Pavlov", era: "1849–1936 | Rusia", theory: "Classical Conditioning", bio: "Ia memenangkan Nobel Fisiologi atas riset pencernaannya. Secara tidak sengaja, anjing-anjing labnya membawanya pada penemuan psikologis terbesar abad ke-20.", contribution: "Membuktikan bahwa respons tubuh bisa dikondisikan (diasosiasikan) melalui stimulus. Konsep dasarnya dipakai dalam terapi fobia dan kecemasan hingga kini.", quote: "\"Jangan menjadi arsiparis fakta, jadilah penjelajah misterinya.\"" },
+  { photo: "images/skinner.png", name: "B.F. Skinner", era: "1904–1990 | Amerika", theory: "Behaviorisme Radikal", bio: "Ilmuwan paling berpengaruh di abad 20. Ia percaya 'kehendak bebas' adalah ilusi dan semua perilaku manusia dibentuk oleh lingkungannya.", contribution: "Pencetus Operant Conditioning (Reward & Punishment). Aplikasinya digunakan luas dari pendidikan sekolah, desain game, hingga algoritma media sosial saat ini.", quote: "\"Konsekuensi dari suatu tindakan menentukan probabilitas tindakan tersebut diulangi.\"" },
 ];
 
 const DISORDERS = [
@@ -1861,9 +1969,9 @@ MYTH_FACTS.forEach((mf, i) => {
 const figuresGrid = $('#figures-grid');
 FIGURES.forEach((fig, i) => {
   const card = document.createElement('div');
-  card.className = 'figure-card reveal delay-' + ((i%3)+1);
+  card.className = 'figure-card';
   card.innerHTML = `
-    <div class="figure-avatar">${fig.emoji}</div>
+    <div class="figure-avatar"><img src="${fig.photo}" alt="${fig.name}" loading="lazy"></div>
     <div class="figure-name">${fig.name}</div>
     <div class="figure-era">${fig.era}</div>
     <div class="figure-theory">${fig.theory}</div>
@@ -1884,7 +1992,8 @@ FIGURES.forEach((fig, i) => {
 
 const figureModal = $('#figure-modal');
 function openFigureModal(fig) {
-  $('#modal-avatar').textContent = fig.emoji;
+  const avatarEl = $('#modal-avatar');
+  avatarEl.innerHTML = `<img src="${fig.photo}" alt="${fig.name}">`;
   $('#modal-name').textContent = fig.name;
   $('#modal-era').textContent = fig.era;
   $('#modal-theory').textContent = fig.theory;
