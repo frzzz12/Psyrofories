@@ -31,6 +31,9 @@
       --text-light: #6B8FB5;
       --gradient-hero: linear-gradient(135deg, #1A3658 0%, #2C5282 40%, #4EA8E8 100%);
       --gradient-soft: linear-gradient(135deg, #F0F8FF 0%, #DFF3FF 100%);
+      --blob-1: #4EA8E8;
+      --blob-2: #A7D8FF;
+      --blob-3: #2C5282;
       --radius-sm: 16px;
       --radius-md: 24px;
       --radius-lg: 40px;
@@ -38,16 +41,61 @@
       --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       --font-main: 'Inter', sans-serif;
       --font-display: 'Playfair Display', serif;
+
+      /* Light mode semantic tokens */
+      --bg-page:    #F8FCFF;
+      --bg-section: #ffffff;
+      --bg-section-alt: linear-gradient(135deg, #F0F8FF 0%, #DFF3FF 100%);
+      --bg-card:    #ffffff;
+      --bg-card-hover: #F8FCFF;
+      --glass-bg-hover: rgba(255,255,255,0.3);
+      --border-card: rgba(255,255,255,0.8);
+      --input-bg:   #ffffff;
+      --input-border: var(--blue-100);
+    }
+    [data-theme="dark"] {
+      --blue-50:  #0d1f35;
+      --blue-100: #122540;
+      --blue-200: #1e3a5f;
+      --blue-300: #2a5080;
+      --blue-400: #4EA8E8;
+      --blue-500: #5BAFF0;
+      --blue-700: #A7D8FF;
+      --blue-900: #DFF3FF;
+      --white:    #0a1628;
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --text-dark:  #E8F4FF;
+      --text-mid:   #A7C8E8;
+      --text-light: #6B9AB8;
+      --gradient-soft: linear-gradient(135deg, #0a1628 0%, #0d1f35 100%);
+      --gradient-hero: linear-gradient(135deg, #050b14 0%, #0f1e33 40%, #1a3658 100%);
+      --blob-1: #1a3658;
+      --blob-2: #2c5282;
+      --blob-3: #0a1628;
+
+      --bg-page:    #060f1e;
+      --bg-section: #0a1628;
+      --bg-section-alt: linear-gradient(135deg, #0a1628 0%, #0d1f35 100%);
+      --bg-card:    #0f1e33;
+      --bg-card-hover: #152540;
+      --glass-bg-hover: rgba(255,255,255,0.1);
+      --border-card: rgba(255,255,255,0.08);
+      --input-bg:   #0f1e33;
+      --input-border: #1e3a5f;
     }
     html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-main);
-      background: #F8FCFF;
+      background: var(--bg-page);
       color: var(--text-dark);
       overflow-x: hidden;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.4s ease;
     }
+
     body.no-scroll { overflow: hidden; }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
@@ -185,9 +233,50 @@
       transition: var(--transition);
     }
     #navbar.scrolled #hamburger span { background: var(--blue-700); }
+
     #hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(6px,6px); }
     #hamburger.open span:nth-child(2) { opacity: 0; }
     #hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }
+
+    /* Dark mode toggle */
+    #dark-toggle {
+      width: 44px; height: 26px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+    #dark-toggle::before {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: var(--transition-smooth);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    [data-theme="dark"] #dark-toggle::before {
+      transform: translateX(18px);
+      background: var(--blue-400);
+    }
+    #navbar.scrolled #dark-toggle {
+      background: var(--blue-50);
+      border-color: var(--blue-200);
+    }
+    #navbar.scrolled #dark-toggle::before {
+      background: var(--blue-700);
+    }
+    [data-theme="dark"] #navbar.scrolled #dark-toggle {
+      background: var(--blue-200);
+    }
+    .nav-icon { font-size: 0.9rem; position: absolute; top: 50%; transform: translateY(-50%); transition: var(--transition); }
+    .nav-icon.sun { left: 6px; opacity: 1; }
+    .nav-icon.moon { right: 5px; opacity: 0.5; }
+    [data-theme="dark"] .nav-icon.sun { opacity: 0.5; }
+    [data-theme="dark"] .nav-icon.moon { opacity: 1; }
 
     /* mobile nav */
     #mobile-nav {
@@ -295,9 +384,9 @@
       position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.6;
       animation: meshFloat 10s infinite alternate ease-in-out;
     }
-    .mesh-blob.b1 { width: 600px; height: 600px; background: #4EA8E8; top: -10%; left: -10%; animation-delay: 0s; }
-    .mesh-blob.b2 { width: 500px; height: 500px; background: #A7D8FF; bottom: -20%; right: -10%; animation-delay: 2s; }
-    .mesh-blob.b3 { width: 400px; height: 400px; background: #2C5282; top: 30%; left: 40%; animation-delay: 4s; }
+    .mesh-blob.b1 { width: 600px; height: 600px; background: var(--blob-1); top: -10%; left: -10%; animation-delay: 0s; }
+    .mesh-blob.b2 { width: 500px; height: 500px; background: var(--blob-2); bottom: -20%; right: -10%; animation-delay: 2s; }
+    .mesh-blob.b3 { width: 400px; height: 400px; background: var(--blob-3); top: 30%; left: 40%; animation-delay: 4s; }
     
     @keyframes meshFloat {
       0% { transform: translate(0, 0) scale(1); }
@@ -418,7 +507,7 @@
     }
     .glass-card-3d:hover {
       transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.05);
-      background: rgba(255,255,255,0.3);
+      background: var(--glass-bg-hover);
     }
     @keyframes float3D {
       0% { transform: perspective(1000px) rotateX(5deg) rotateY(-10deg) translateY(0); }
@@ -612,8 +701,10 @@
     #figures { background: var(--gradient-soft); }
     .figures-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px; position: relative; z-index: 2;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 2;
     }
     .figure-card {
       background: #fff;
@@ -659,12 +750,28 @@
     .figure-card {
       animation: figureIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
-    .figure-card:nth-child(1) { animation-delay: 0.1s; }
-    .figure-card:nth-child(2) { animation-delay: 0.15s; }
-    .figure-card:nth-child(3) { animation-delay: 0.2s; }
-    .figure-card:nth-child(4) { animation-delay: 0.25s; }
-    .figure-card:nth-child(5) { animation-delay: 0.3s; }
-    .figure-card:nth-child(6) { animation-delay: 0.35s; }
+    .figure-card:nth-child(1) { animation-delay: 0.05s; }
+    .figure-card:nth-child(2) { animation-delay: 0.1s; }
+    .figure-card:nth-child(3) { animation-delay: 0.15s; }
+    .figure-card:nth-child(4) { animation-delay: 0.2s; }
+    .figure-card:nth-child(5) { animation-delay: 0.25s; }
+    .figure-card:nth-child(6) { animation-delay: 0.3s; }
+    .figure-card:nth-child(7) { animation-delay: 0.35s; }
+    .figure-card:nth-child(8) { animation-delay: 0.4s; }
+    .figure-card:nth-child(9) { animation-delay: 0.45s; }
+    .figure-card:nth-child(10) { animation-delay: 0.5s; }
+    .figure-card:nth-child(11) { animation-delay: 0.55s; }
+    .figure-card:nth-child(12) { animation-delay: 0.6s; }
+    .figure-card:nth-child(13) { animation-delay: 0.05s; }
+    .figure-card:nth-child(14) { animation-delay: 0.1s; }
+    .figure-card:nth-child(15) { animation-delay: 0.15s; }
+    .figure-card:nth-child(16) { animation-delay: 0.2s; }
+    .figure-card:nth-child(17) { animation-delay: 0.25s; }
+    .figure-card:nth-child(18) { animation-delay: 0.3s; }
+    .figure-card:nth-child(19) { animation-delay: 0.35s; }
+    .figure-card:nth-child(20) { animation-delay: 0.4s; }
+    .figure-card:nth-child(21) { animation-delay: 0.45s; }
+    .figure-card:nth-child(22) { animation-delay: 0.5s; }
     .figure-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); transition: var(--transition);}
     .figure-card:hover .figure-name { color: #fff; }
     .figure-era { font-size: .85rem; color: var(--text-light); margin-bottom: 16px; transition: var(--transition); font-weight: 500;}
@@ -736,13 +843,19 @@
     ============================================================ */
     #disorders { background: #fff; position: relative; }
     .disorder-tabs {
-      display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; justify-content: center;
-      background: var(--blue-50); padding: 10px; border-radius: var(--radius-md);
+      display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 40px;
+      background: var(--blue-50); padding: 8px; border-radius: var(--radius-md);
       max-width: 100%; margin-left: auto; margin-right: auto;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .disorder-tabs::-webkit-scrollbar { display: none; }
+
     .disorder-tab {
-      padding: 12px 28px; border-radius: 99px; font-size: 1rem; font-weight: 700;
+      padding: 10px 20px; border-radius: 99px; font-size: 0.88rem; font-weight: 700;
       color: var(--text-mid); transition: var(--transition); position: relative; z-index: 1;
+      white-space: nowrap; flex-shrink: 0; scroll-snap-align: start;
     }
     .disorder-tab.active { color: #fff; }
     .disorder-tab::before {
@@ -1119,7 +1232,7 @@
       #hamburger { display: flex; }
       .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
       .hero-title { font-size: 3.5rem; }
-      .figures-grid { grid-template-columns: repeat(3, 1fr); }
+      .figures-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
     }
 
     /* --- Tablet Portrait (≤768px) --- */
@@ -1227,20 +1340,80 @@
     }
     /* scrollbar */
     ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #F8FCFF; }
+    ::-webkit-scrollbar-track { background: var(--bg-page); }
     ::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 99px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
 
     /* back to top */
     #back-to-top {
       position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px;
-      background: #fff; color: var(--blue-700); border-radius: 50%; border: 2px solid var(--blue-200);
+      background: var(--bg-card); color: var(--blue-700); border-radius: 50%; border: 2px solid var(--blue-200);
       display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;
       box-shadow: 0 10px 25px rgba(44,82,130,.2); opacity: 0; visibility: hidden; z-index: 999;
       transition: var(--transition-smooth); cursor: pointer;
     }
     #back-to-top.visible { opacity: 1; visibility: visible; }
     #back-to-top:hover { transform: translateY(-8px); background: var(--blue-700); color: #fff; border-color: var(--blue-700); box-shadow: 0 15px 35px rgba(44,82,130,.3);}
+
+    /* ============================================================
+       DARK MODE OVERRIDES
+    ============================================================ */
+    [data-theme="dark"] #education { background: var(--bg-section-alt); }
+    [data-theme="dark"] #myth-fact { background: var(--bg-section); }
+    [data-theme="dark"] #disorders { background: var(--bg-section); }
+    [data-theme="dark"] footer { background: #020b18; }
+    [data-theme="dark"] footer::before { background: var(--bg-section); }
+    [data-theme="dark"] .edu-card { background: var(--bg-card); border-color: var(--border-card); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+    [data-theme="dark"] .edu-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+    [data-theme="dark"] .myth-front { background: linear-gradient(135deg, #1a0a0a, #2d1515); border-color: #5a2020; }
+    [data-theme="dark"] .myth-back { background: linear-gradient(135deg, #0a1a0a, #0d2a10); border-color: #1a5a25; }
+    [data-theme="dark"] .myth-text, [data-theme="dark"] .fact-text { color: rgba(255,255,255,0.85); }
+    [data-theme="dark"] .figure-card { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .disorder-tabs { background: var(--blue-100); }
+    [data-theme="dark"] .disorder-stat-card { background: var(--blue-100); }
+    [data-theme="dark"] .disorder-info { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .symptom-item { background: var(--blue-100); }
+    [data-theme="dark"] .mood-tracker-wrap,
+    [data-theme="dark"] .journal-editor,
+    [data-theme="dark"] .journal-list-section,
+    [data-theme="dark"] .quiz-wrap,
+    [data-theme="dark"] .selfcare-column { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-entry { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-entry:hover { background: var(--bg-card); }
+    [data-theme="dark"] textarea, [data-theme="dark"] input[type="text"] { background: var(--bg-section); border-color: var(--input-border); color: var(--text-dark); }
+    [data-theme="dark"] .quiz-option { background: var(--bg-section); border-color: var(--border-card); color: var(--text-dark); }
+    [data-theme="dark"] .quiz-option:hover { border-color: var(--blue-400); background: var(--blue-100); }
+    [data-theme="dark"] .selfcare-item { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .selfcare-item.done { background: var(--blue-100); }
+    [data-theme="dark"] .selfcare-progress-card { background: var(--bg-card); }
+    [data-theme="dark"] .selfcare-reset { background: var(--bg-section); color: var(--text-mid); border-color: var(--border-card); }
+    [data-theme="dark"] .modal-box { background: var(--bg-card); }
+    [data-theme="dark"] .modal-quote { background: var(--blue-100); }
+    [data-theme="dark"] .modal-text { color: var(--text-mid); }
+    [data-theme="dark"] .section-badge { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .edu-tag { background: var(--blue-100); color: var(--blue-400); border-color: var(--blue-200); }
+    [data-theme="dark"] .figure-theory { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .toast { background: var(--bg-card); color: var(--text-dark); }
+    [data-theme="dark"] #navbar.scrolled { background: rgba(10,22,40,0.92); border-color: rgba(255,255,255,0.1); }
+    [data-theme="dark"] #navbar.scrolled .nav-logo { color: var(--blue-400); }
+    [data-theme="dark"] #navbar.scrolled .nav-links a { color: var(--text-mid); }
+    [data-theme="dark"] #mobile-nav { background: #060f1e; }
+    [data-theme="dark"] .mobile-nav-link { color: var(--text-mid); border-color: var(--border-card); }
+    [data-theme="dark"] .mobile-nav-link:hover { background: var(--blue-100); color: var(--blue-400); }
+    [data-theme="dark"] .disorder-tab { color: var(--text-mid); }
+    [data-theme="dark"] .disorder-tab:hover:not(.active) { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .mood-btn { background: var(--blue-100); }
+    [data-theme="dark"] .quiz-result { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .floating-input, [data-theme="dark"] .floating-textarea, [data-theme="dark"] #mood-note { background: var(--bg-section); border-color: var(--input-border); color: var(--text-dark); }
+    [data-theme="dark"] #daily-quote { background: var(--gradient-hero); }
+    [data-theme="dark"] .mood-activity-suggest { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] #selfcare, [data-theme="dark"] #journaling { background: var(--bg-section); }
+    [data-theme="dark"] .disorder-content { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .mood-emoji-btn { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .mood-emoji-btn.selected { background: var(--blue-100); border-color: var(--blue-400); }
+    [data-theme="dark"] .mood-emoji-btn:hover { background: var(--blue-200); }
+    [data-theme="dark"] .journal-mood-opt { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-mood-opt:hover { background: var(--blue-200); }
   </style>
 </head>
 <body>
@@ -1269,6 +1442,10 @@
     <li><a href="#quiz">Quiz</a></li>
     <li><a href="#selfcare" class="nav-cta btn-ripple">Self-Care</a></li>
   </ul>
+  <button id="dark-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+    <span class="nav-icon sun">☀️</span>
+    <span class="nav-icon moon">🌙</span>
+  </button>
   <button id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -1765,14 +1942,46 @@ const FIGURES = [
   { photo: "images/piaget.png", name: "Jean Piaget", era: "1896–1980 | Swiss", theory: "Perkembangan Kognitif", bio: "Seorang ahli biologi yang terpesona oleh kesalahan sistematis anak-anak saat tes IQ, menyadari bahwa anak-anak berpikir dengan cara yang secara fundamental berbeda dari orang dewasa.", contribution: "Mengidentifikasi 4 tahap emas perkembangan kognitif anak. Ia mengubah wajah pendidikan modern yang beralih dari hapalan ke penemuan aktif.", quote: "\"Tujuan pendidikan bukanlah meningkatkan jumlah pengetahuan, tapi menciptakan kemungkinan bagi anak untuk menemukan.\"" },
   { photo: "images/pavlov.png", name: "Ivan Pavlov", era: "1849–1936 | Rusia", theory: "Classical Conditioning", bio: "Ia memenangkan Nobel Fisiologi atas riset pencernaannya. Secara tidak sengaja, anjing-anjing labnya membawanya pada penemuan psikologis terbesar abad ke-20.", contribution: "Membuktikan bahwa respons tubuh bisa dikondisikan (diasosiasikan) melalui stimulus. Konsep dasarnya dipakai dalam terapi fobia dan kecemasan hingga kini.", quote: "\"Jangan menjadi arsiparis fakta, jadilah penjelajah misterinya.\"" },
   { photo: "images/skinner.png", name: "B.F. Skinner", era: "1904–1990 | Amerika", theory: "Behaviorisme Radikal", bio: "Ilmuwan paling berpengaruh di abad 20. Ia percaya 'kehendak bebas' adalah ilusi dan semua perilaku manusia dibentuk oleh lingkungannya.", contribution: "Pencetus Operant Conditioning (Reward & Punishment). Aplikasinya digunakan luas dari pendidikan sekolah, desain game, hingga algoritma media sosial saat ini.", quote: "\"Konsekuensi dari suatu tindakan menentukan probabilitas tindakan tersebut diulangi.\"" },
+  { photo: "images/wundt.png", name: "Wilhelm Wundt", era: "1832–1920 | Jerman", theory: "Psikologi Eksperimental", bio: "Sering disebut 'Bapak Psikologi Modern'. Ia mendirikan laboratorium psikologi pertama di dunia di Leipzig pada 1879, menandai kelahiran psikologi sebagai ilmu mandiri.", contribution: "Mendirikan laboratorium psikologi eksperimental pertama. Mengembangkan metode introspeksi ilmiah dan memisahkan psikologi dari filsafat.", quote: "\"Tugas psikologi adalah mempelajari fenomena kesadaran langsung.\"" },
+  { photo: "images/bandura.png", name: "Albert Bandura", era: "1925–2021 | Kanada/Amerika", theory: "Teori Belajar Sosial", bio: "Psikolog paling dikutip di dunia. Eksperimen Bobo Doll-nya membuktikan bahwa kekerasan bisa 'ditularkan' melalui pengamatan dan peniruan tanpa hadiah atau hukuman langsung.", contribution: "Menjembatani behaviorisme dan kognitivisme. Mencetuskan konsep Self-Efficacy — keyakinan seseorang akan kemampuannya — sebagai prediktor utama keberhasilan.", quote: "\"Orang dengan Self-Efficacy tinggi memandang tugas sulit sebagai tantangan yang harus dikuasai, bukan ancaman yang harus dihindari.\"" },
+  { photo: "images/erikson.png", name: "Erik Erikson", era: "1902–1994 | Jerman/Amerika", theory: "Perkembangan Psikososial", bio: "Murid Anna Freud yang melampaui gurunya. Ia melihat perkembangan manusia bukan hanya di masa kecil, tapi sebagai perjalanan seumur hidup dalam 8 tahap yang berbeda.", contribution: "Menciptakan teori 8 Tahap Perkembangan Psikososial (dari bayi hingga lansia). Mempopulerkan istilah 'Krisis Identitas' sebagai fase penting masa remaja.", quote: "\"Di sini terdapat harapan — anak yang tumbuh dengan baik akan menularkan kebaikan ke generasi berikutnya.\"" },
+  { photo: "images/adler.png", name: "Alfred Adler", era: "1870–1937 | Austria", theory: "Psikologi Individual", bio: "Kolega Freud yang berpisah karena tak setuju alam bawah sadar seksual adalah segalanya. Adler meyakini rasa rendah diri (inferiority) adalah pendorong utama perilaku manusia.", contribution: "Mencetuskan konsep 'Inferiority Complex' dan 'Superiority Complex'. Pelopornya terapi keluarga dan psikologi komunitas. Pemikiran utamanya memengaruhi CBT.", quote: "\"Tidak ada pengalaman yang menjadi sebab kesuksesan atau kegagalan kita. Kitalah yang menentukannya.\"" },
+  { photo: "images/rogers.png", name: "Carl Rogers", era: "1902–1987 | Amerika", theory: "Psikologi Humanistik / Person-Centered", bio: "Psikolog yang paling hangat dan manusiawi. Ia percaya setiap manusia memiliki kemampuan bawaan untuk tumbuh jika diberi lingkungan yang tepat.", contribution: "Mendirikan Client-Centered Therapy (sekarang Person-Centered Therapy). Mengidentifikasi 3 kondisi inti terapi efektif: Empati, Ketulusan, dan Penerimaan Tanpa Syarat.", quote: "\"Rasa ingin tahu yang luar biasa tentang hidup dan pengalaman manusia itulah yang mengisi diriku.\"" },
+  { photo: "images/vygotsky.png", name: "Lev Vygotsky", era: "1896–1934 | Rusia", theory: "Konstruktivisme Sosial", bio: "Jenius yang meninggal terlalu muda di usia 37 karena TBC. Meski hidupnya singkat, pemikirannya tentang peran sosial dalam belajar masih sangat relevan hingga kini.", contribution: "Mencetuskan 'Zone of Proximal Development' (ZPD) — ruang belajar optimal di antara yang sudah dikuasai dan yang belum. Dasar dari konsep 'scaffolding' dalam pendidikan.", quote: "\"Melalui orang lain, kita menjadi diri kita sendiri.\"" },
+  { photo: "images/horney.png", name: "Karen Horney", era: "1885–1952 | Jerman/Amerika", theory: "Neopsikoanalisis Feminis", bio: "Psikoanalis perempuan pertama yang berani menentang Freud secara terbuka. Ia berpendapat 'penis envy' adalah konstruk budaya, bukan fakta biologis.", contribution: "Menggeser fokus psikoanalisis dari seksualitas ke kecemasan dasar dan relasi sosial. Mencetuskan 10 'Neurotic Needs' dan tiga strategi koping: mendekati, menentang, menghindari.", quote: "\"Keberanian sejati adalah melakukan sesuatu yang menakutkan.\"" },
+  { photo: "images/beck.png", name: "Aaron Beck", era: "1921–2021 | Amerika", theory: "Terapi Kognitif (CBT)", bio: "Seorang psikiater yang frustrasi dengan psikoanalisis karena tidak ada buktinya. Ia kemudian mengembangkan CBT yang terbukti klinis dan merevolusi psikiatri modern.", contribution: "Bapak Cognitive Behavioral Therapy (CBT). Mengidentifikasi 'Distorsi Kognitif' (pikiran negatif otomatis) sebagai akar masalah. CBT kini menjadi terapi paling teruji di dunia.", quote: "\"Bukan situasi yang menyebabkan emosi kita, melainkan interpretasi kita terhadap situasi tersebut.\"" },
+  { photo: "images/seligman.png", name: "Martin Seligman", era: "1942– | Amerika", theory: "Psikologi Positif", bio: "Presiden APA yang berpikir psikologi terlalu lama hanya berfokus pada penyakit. Ia menginisiasi gerakan Psikologi Positif untuk mempelajari apa yang membuat hidup layak dijalani.", contribution: "Bapak Psikologi Positif dan pendiri Positive Education. Mengembangkan model PERMA (Positive Emotion, Engagement, Relationships, Meaning, Achievement) untuk kesejahteraan.", quote: "\"Optimisme adalah investasi untuk masa depan diri sendiri.\"" },
+  { photo: "images/james.png", name: "William James", era: "1842–1910 | Amerika", theory: "Fungsionalisme / Pragmatisme", bio: "Filosof dan psikolog Amerika yang dianggap sebagai 'Bapak Psikologi Amerika'. Saudaranya, Henry James, adalah novelis terkenal, dan ia sendiri berjuang dengan depresi parah.", contribution: "Menulis 'The Principles of Psychology' (1890), buku teks psikologi pertama yang berpengaruh. Mencetuskan Teori Emosi James-Lange: emosi adalah kesadaran kita akan perubahan tubuh.", quote: "\"Senjata terbesar menghadapi stres adalah kemampuan memilih satu pikiran di atas pikiran lainnya.\"" },
+  { photo: "images/frankl.png", name: "Viktor Frankl", era: "1905–1997 | Austria", theory: "Logoterapi / Eksistensialisme", bio: "Psikiater yang selamat dari kamp konsentrasi Nazi (Auschwitz). Pengalaman traumatisnya justru memvalidasi teorinya: selama ada makna, manusia bisa menanggung penderitaan apapun.", contribution: "Mendirikan Logoterapi (terapi makna). Menulis 'Man's Search for Meaning' — salah satu 10 buku paling berpengaruh di Amerika. Membuktikan bahwa kebebasan batin tidak bisa dirampas.", quote: "\"Di antara stimulus dan respons, ada ruang. Di ruang itulah kebebasan dan pertumbuhan kita berada.\"" },
+  { photo: "images/kahneman.png", name: "Daniel Kahneman", era: "1934–2024 | Israel/Amerika", theory: "Ekonomi Perilaku / Psikologi Kognitif", bio: "Psikolog pertama yang memenangkan Nobel Ekonomi. Bersama Amos Tversky, ia membuktikan bahwa manusia jauh dari 'rasional' dalam mengambil keputusan.", contribution: "Mengembangkan Teori Prospek dan memperkenalkan dua sistem berpikir: Sistem 1 (cepat, intuitif, emosional) dan Sistem 2 (lambat, analitis, logis) dalam bukunya 'Thinking, Fast and Slow'.", quote: "\"Kita tidak berpikir tentang keadaan kita, kita berpikir tentang perubahan dari keadaan referensi.\"" },
+  { photo: "images/milgram.png", name: "Stanley Milgram", era: "1933–1984 | Amerika", theory: "Psikologi Sosial / Kepatuhan", bio: "Eksperimennya adalah salah satu yang paling gelap dan paling penting dalam sejarah psikologi. Ia ingin memahami bagaimana orang biasa bisa melakukan kekejaman Nazi.", contribution: "Eksperimen Kepatuhan Milgram membuktikan 65% orang biasa rela memberikan sengatan listrik mematikan atas perintah otoritas. Merevolusi pemahaman kita tentang kejahatan dan kepatuhan.", quote: "\"Sering kali bukan karakter yang buruk, melainkan situasilah yang mendorong orang melakukan hal buruk.\"" },
+  { photo: "images/bowlby.png", name: "Bowlby & Ainsworth", era: "1907–1990 & 1913–1999", theory: "Teori Kelekatan (Attachment)", bio: "John Bowlby membangun fondasi teori kelekatan; Mary Ainsworth mengujinya secara eksperimental dengan 'Strange Situation' untuk mengidentifikasi 3 pola kelekatan utama pada bayi.", contribution: "Membuktikan bahwa ikatan aman (secure attachment) di masa bayi adalah pondasi kesehatan mental seumur hidup. Dasar dari ilmu pengasuhan anak modern.", quote: "\"Kelekatan adalah bagian dari sifat manusia, dari buaian hingga liang lahat.\" — Bowlby" },
+  { photo: "images/allport.png", name: "Gordon Allport", era: "1897–1967 | Amerika", theory: "Psikologi Kepribadian (Trait)", bio: "Pelopor psikologi kepribadian modern. Berbeda dari Freud, ia berfokus pada keunikan dan individualitas setiap manusia, bukan mencari pola universal yang tersembunyi.", contribution: "Menemukan lebih dari 4.000 kata sifat kepribadian dalam kamus. Membagi sifat menjadi Kardinal, Sentral, dan Sekunder. Meletakkan fondasi bagi Big Five Personality (OCEAN) modern.", quote: "\"Kepribadian adalah organisasi dinamis dalam diri individu dari sistem psikofisik yang menentukan pikiran dan perilakunya.\"" },
+  { photo: "images/witmer.png", name: "Lightner Witmer", era: "1867–1956 | Amerika", theory: "Psikologi Klinis", bio: "Orang yang menjadikan psikologi bukan sekadar ilmu akademis di laboratorium, melainkan profesi yang membantu langsung manusia yang membutuhkan.", contribution: "Mendirikan klinik psikologi pertama di dunia (1896) di Universitas Pennsylvania. Orang pertama yang menggunakan istilah 'Clinical Psychology'. Pelopor layanan psikologi pendidikan.", quote: "\"Psikologi harus membuktikan nilainya dalam pelayanan langsung kepada manusia yang membutuhkan.\"" },
 ];
 
 const DISORDERS = [
-  { id: "anxiety", tab: "😰 Kecemasan", name: "Anxiety Disorder", nameId: "Gangguan Kecemasan General", desc: "Kondisi melumpuhkan di mana sistem alarm otak terus menyala meski tidak ada bahaya nyata. Kekhawatiran intens memakan energi mental setiap hari.", symptoms: ["Overthinking berlebih yang di luar kendali", "Jantung berdebar keras, keringat dingin, napas pendek", "Sensasi 'blank' atau lumpuh otak", "Ketegangan otot leher/bahu kronis", "Insomnia karena pikiran yang berlari cepat"], stats: [{num:"301M", label:"Kasus Global"},{num:"1/3", label:"Terdiagnosis"},{num:"#1", label:"Kasus Terbanyak"},{num:"75%", label:"Sembuh dgn CBT"}], emoji: "😰", helpText: "CBT (Cognitive Behavioral Therapy) terbukti secara klinis untuk 'menyetel ulang' alarm otak yang terlalu sensitif ini." },
-  { id: "depression", tab: "😔 Depresi", name: "Major Depression", nameId: "Depresi Klinis", desc: "Bukan sekadar 'sedih'. Depresi adalah kabur distorsi persepsi di mana otak kehilangan kemampuan merasakan kesenangan (anhedonia) dan menguras energi fisik.", symptoms: ["Kekosongan emosional yang persisten", "Anhedonia: kehilangan total minat pada hobi", "Perubahan drastis selera makan & berat badan", "Fatigue: kelelahan ekstrim sekadar untuk bangun", "Pikiran gelap tentang ketidakberhargaan atau kematian"], stats: [{num:"280M", label:"Kasus Global"},{num:"#1", label:"Penyebab Disabilitas"},{num:"50%", label:"Tak Diobati"},{num:"80%", label:"Respons Terapi"}], emoji: "😔", helpText: "Kombinasi Psikoterapi, perubahan gaya hidup (olahraga teratur), dan farmakoterapi bila perlu sangat efektif." },
-  { id: "ocd", tab: "🔁 OCD", name: "Obsessive-Compulsive", nameId: "Gangguan Obsesif Kompulsif", desc: "Siklus kejam antara pikiran menakutkan yang intrusif (obsesi) dan keharusan mutlak melakukan suatu ritual (kompulsi) untuk mencegah 'bencana' fiktif.", symptoms: ["Pikiran intrusif tentang kuman, kekerasan, atau kesalahan", "Ritual repetitif: mencuci, memeriksa kunci, menghitung", "Kepanikan hebat jika ritual digagalkan", "Memakan waktu berjam-jam tiap harinya", "Sadar itu tidak rasional tapi tak bisa berhenti"], stats: [{num:"2-3%", label:"Populasi Global"},{num:"10thn", label:"Delay Diagnosis"},{num:"Top 10", label:"Disabilitas WHO"},{num:"70%", label:"Sukses dgn ERP"}], emoji: "🔁", helpText: "ERP (Exposure and Response Prevention) adalah Gold Standard. Pasien berlatih menghadapi rasa takut tanpa melakukan ritual kompulsinya." },
-  { id: "adhd", tab: "⚡ ADHD", name: "ADHD", nameId: "Defisit Perhatian/Hiperaktivitas", desc: "Bukan karena malas. Ini adalah kondisi neurodevelopmental struktural otak terkait defisit dopamin yang mengacaukan fungsi eksekutif (perhatian, memori, impuls).", symptoms: ["Buta Waktu (Time blindness) dan prokrastinasi akut", "Hyperfocus pada minat, tapi 0 fokus pada tugas bosan", "Impulsivitas ekstrim dalam bicara atau belanja", "Gelisah fisik atau mental (pikiran yang riuh)", "Kesulitan luar biasa mengorganisir tugas harian"], stats: [{num:"8%", label:"Anak-anak"},{num:"3%", label:"Dewasa"},{num:"3:1", label:"Pria:Wanita"},{num:"Top 1", label:"Genetik (Sangat)"}], emoji: "⚡", helpText: "Manajemen multidisiplin: Medikasi stimulan (bekerja sangat baik), terapi perilaku, dan pembangunan sistem/tools struktur hidup." },
+  { id: "anxiety", tab: "Kecemasan", name: "Anxiety Disorder", nameId: "Gangguan Kecemasan General", desc: "Kondisi melumpuhkan di mana sistem alarm otak terus menyala meski tidak ada bahaya nyata. Kekhawatiran intens memakan energi mental setiap hari.", symptoms: ["Overthinking berlebih yang di luar kendali", "Jantung berdebar keras, keringat dingin, napas pendek", "Sensasi 'blank' atau lumpuh otak", "Ketegangan otot leher/bahu kronis", "Insomnia karena pikiran yang berlari cepat"], stats: [{num:"301M", label:"Kasus Global"},{num:"1/3", label:"Terdiagnosis"},{num:"#1", label:"Kasus Terbanyak"},{num:"75%", label:"Sembuh dgn CBT"}], emoji: "😰", helpText: "CBT (Cognitive Behavioral Therapy) terbukti secara klinis untuk 'menyetel ulang' alarm otak yang terlalu sensitif ini." },
+  { id: "depression", tab: "Depresi", name: "Major Depression", nameId: "Depresi Klinis", desc: "Bukan sekadar 'sedih'. Depresi adalah distorsi persepsi di mana otak kehilangan kemampuan merasakan kesenangan (anhedonia) dan menguras energi fisik.", symptoms: ["Kekosongan emosional yang persisten", "Anhedonia: kehilangan total minat pada hobi", "Perubahan drastis selera makan & berat badan", "Fatigue: kelelahan ekstrim sekadar untuk bangun", "Pikiran gelap tentang ketidakberhargaan atau kematian"], stats: [{num:"280M", label:"Kasus Global"},{num:"#1", label:"Penyebab Disabilitas"},{num:"50%", label:"Tak Diobati"},{num:"80%", label:"Respons Terapi"}], emoji: "😔", helpText: "Kombinasi Psikoterapi, perubahan gaya hidup (olahraga teratur), dan farmakoterapi bila perlu sangat efektif." },
+  { id: "ocd", tab: "OCD", name: "Obsessive-Compulsive", nameId: "Gangguan Obsesif Kompulsif", desc: "Siklus kejam antara pikiran menakutkan yang intrusif (obsesi) dan keharusan mutlak melakukan suatu ritual (kompulsi) untuk mencegah 'bencana' fiktif.", symptoms: ["Pikiran intrusif tentang kuman, kekerasan, atau kesalahan", "Ritual repetitif: mencuci, memeriksa kunci, menghitung", "Kepanikan hebat jika ritual digagalkan", "Memakan waktu berjam-jam tiap harinya", "Sadar itu tidak rasional tapi tak bisa berhenti"], stats: [{num:"2-3%", label:"Populasi Global"},{num:"10thn", label:"Delay Diagnosis"},{num:"Top 10", label:"Disabilitas WHO"},{num:"70%", label:"Sukses dgn ERP"}], emoji: "🔁", helpText: "ERP (Exposure and Response Prevention) adalah Gold Standard. Pasien berlatih menghadapi rasa takut tanpa melakukan ritual kompulsinya." },
+  { id: "adhd", tab: "ADHD", name: "ADHD", nameId: "Defisit Perhatian/Hiperaktivitas", desc: "Bukan karena malas. Ini adalah kondisi neurodevelopmental struktural otak terkait defisit dopamin yang mengacaukan fungsi eksekutif (perhatian, memori, impuls).", symptoms: ["Buta Waktu (Time blindness) dan prokrastinasi akut", "Hyperfocus pada minat, tapi 0 fokus pada tugas bosan", "Impulsivitas ekstrim dalam bicara atau belanja", "Gelisah fisik atau mental (pikiran yang riuh)", "Kesulitan luar biasa mengorganisir tugas harian"], stats: [{num:"8%", label:"Anak-anak"},{num:"3%", label:"Dewasa"},{num:"3:1", label:"Pria:Wanita"},{num:"Top 1", label:"Genetik (Sangat)"}], emoji: "⚡", helpText: "Manajemen multidisiplin: Medikasi stimulan (bekerja sangat baik), terapi perilaku, dan pembangunan sistem/tools struktur hidup." },
+  { id: "insomnia", tab: "Insomnia", name: "Insomnia Disorder", nameId: "Gangguan Tidur Insomnia", desc: "Ketidakmampuan kronis untuk memulai atau mempertahankan tidur yang cukup meski ada kesempatan. Bukan sekadar susah tidur biasa, ini mengganggu fungsi harian secara signifikan.", symptoms: ["Sulit tertidur meski sudah sangat lelah", "Sering terbangun di malam hari dan susah tidur kembali", "Bangun terlalu pagi dan tidak bisa tidur lagi", "Kelelahan, konsentrasi buruk di siang hari", "Iritabilitas, kecemasan, atau depresi akibat kurang tidur"], stats: [{num:"30%", label:"Orang Dewasa"},{num:"10%", label:"Insomnia Kronis"},{num:"3x", label:"Risiko Depresi"},{num:"80%", label:"Membaik dgn CBT-I"}], emoji: "😴", helpText: "CBT-I (CBT untuk Insomnia) lebih efektif dari obat tidur dalam jangka panjang. Teknik relaksasi dan sleep hygiene sangat membantu." },
+  { id: "ptsd", tab: "PTSD", name: "Post-Traumatic Stress Disorder", nameId: "Gangguan Stres Pasca-Trauma", desc: "Respons otak yang terjebak dalam mode 'siaga darurat' jauh setelah kejadian traumatik berakhir. Trauma bisa muncul dari perang, kekerasan, kecelakaan, atau bencana.", symptoms: ["Flashback dan mimpi buruk tentang trauma yang intens", "Menghindari segala hal yang mengingatkan pada trauma", "Hypervigilance (selalu waspada berlebihan)", "Mati rasa emosional atau merasa terasing", "Reaksi terkejut yang berlebihan (startle response)"], stats: [{num:"70%", label:"Alami Trauma"},{num:"20%", label:"Berkembang PTSD"},{num:"3.9%", label:"Prevalensi Global"},{num:"60-80%", label:"Respons Terapi"}], emoji: "🌪️", helpText: "EMDR (Eye Movement Desensitization) dan Prolonged Exposure Therapy terbukti sangat efektif. Dukungan sosial adalah kunci pemulihan." },
+  { id: "npd", tab: "Narsistik", name: "Narcissistic Personality Disorder", nameId: "Gangguan Kepribadian Narsistik", desc: "Pola pervasif rasa keagungan diri, kebutuhan ekstrim akan kekaguman, dan kurangnya empati. Di balik fasad percaya diri tersembunyi rasa rapuh yang sangat dalam.", symptoms: ["Rasa grandiositas dan kepentingan diri yang berlebihan", "Sibuk dengan fantasi kesuksesan, kekuasaan, atau kecantikan tak terbatas", "Percaya dirinya spesial dan hanya bisa dipahami orang istimewa", "Mengeksploitasi orang lain demi tujuan pribadi", "Iri pada orang lain atau percaya orang lain iri padanya"], stats: [{num:"0.5-5%", label:"Populasi"},{num:"75%", label:"Pria"},{num:"Sulit", label:"Diobati"},{num:"60%", label:"Ada Komorbid"}], emoji: "🪞", helpText: "Terapi sangat menantang karena penderita jarang mau mencari bantuan. Psikoterapi jangka panjang (DBT/Schema Therapy) paling efektif." },
+  { id: "bpd", tab: "BPD", name: "Borderline Personality Disorder", nameId: "Gangguan Kepribadian Ambang", desc: "Kondisi intens ditandai oleh ketidakstabilan emosi ekstrim, identitas yang rapuh, dan ketakutan mendalam akan penolakan dan ditinggalkan.", symptoms: ["Ketakutan ekstrim akan penolakan dan ditinggalkan", "Hubungan interpersonal yang intens dan tidak stabil (idealisasi vs. devaluasi)", "Identitas diri yang tidak stabil dan berubah-ubah", "Impulsivitas berbahaya (belanja, seks, penyalahgunaan zat)", "Perilaku menyakiti diri sendiri atau ancaman bunuh diri"], stats: [{num:"1.6%", label:"Populasi"},{num:"75%", label:"Perempuan"},{num:"70%", label:"Riwayat Trauma"},{num:"86%", label:"Respons DBT"}], emoji: "🌊", helpText: "DBT (Dialectical Behavior Therapy) dikembangkan khusus untuk BPD oleh Marsha Linehan dan memiliki tingkat efektivitas sangat tinggi." },
+  { id: "schizophrenia", tab: "Skizofrenia", name: "Schizophrenia", nameId: "Skizofrenia", desc: "Gangguan psikotik berat yang memutus koneksi seseorang dengan realitas. Melibatkan halusinasi, delusi, dan pikiran yang sangat kacau — bukan kepribadian ganda.", symptoms: ["Halusinasi (umumnya mendengar suara yang orang lain tidak dengar)", "Delusi (keyakinan palsu yang kuat, misal: sedang dimata-matai)", "Pikiran tidak terorganisir dan pembicaraan kacau", "Gejala Negatif: afek datar, menarik diri sosial, anhedonia", "Penurunan fungsi dalam pekerjaan, hubungan, atau perawatan diri"], stats: [{num:"24M", label:"Kasus Global"},{num:"0.32%", label:"Prevalensi"},{num:"Sama", label:"Semua Gender"},{num:"50%", label:"Tak Diobati"}], emoji: "🧩", helpText: "Antipsikotik sangat efektif mengurangi gejala positif. Dikombinasikan dengan rehabilitasi psikososial untuk pemulihan optimal." },
+  { id: "eating", tab: "Eating Disorder", name: "Eating Disorders", nameId: "Gangguan Makan", desc: "Gangguan psikiatri serius ditandai perilaku makan yang tidak normal dan kekhawatiran berlebihan tentang berat badan. Memiliki tingkat kematian tertinggi di antara semua gangguan mental.", symptoms: ["Pembatasan ekstrim asupan makanan (Anorexia)", "Makan berlebihan diikuti kompensasi seperti muntah paksa (Bulimia)", "Episode makan kompulsif tanpa kompensasi (Binge Eating)", "Distorsi citra tubuh yang parah", "Ritual makan yang kaku dan obsesif"], stats: [{num:"9%", label:"Populasi Global"},{num:"Tertinggi", label:"Angka Kematian"},{num:"1 per jam", label:"Meninggal di AS"},{num:"70%", label:"Komorbid Ansietas"}], emoji: "🍃", helpText: "Tim multidisiplin: psikiater, ahli gizi, dan psikoterapis dibutuhkan. CBT-E (Enhanced) efektif untuk Bulimia dan Binge Eating." },
+  { id: "bipolar", tab: "Bipolar", name: "Bipolar Disorder", nameId: "Gangguan Bipolar", desc: "Gangguan mood yang menyebabkan pergeseran ekstrim antara episode mania (energi meledak) dan depresi berat. Pergeseran ini dapat berlangsung berhari-hari hingga berbulan-bulan.", symptoms: ["Fase Mania: energi meledak, euforia, tidak butuh tidur", "Fase Depresi: sedih mendalam, kelelahan ekstrim, putus asa", "Pikiran berpacu (racing thoughts) dan berbicara sangat cepat", "Keputusan impulsif dan berisiko saat mania (belanja, seks)", "Sulit mempertahankan pekerjaan atau hubungan stabil"], stats: [{num:"45M", label:"Kasus Global"},{num:"2.8%", label:"Prevalensi"},{num:"60%", label:"Salah Diagnosis"},{num:"40%", label:"Riwayat Penyalahgunaan Zat"}], emoji: "⚡", helpText: "Stabilizer mood (Lithium) adalah gold standard. Psikoedukasi untuk pasien dan keluarga sangat penting untuk mencegah relaps." },
+  { id: "phobia", tab: "Fobia", name: "Specific Phobia", nameId: "Fobia Spesifik", desc: "Rasa takut intens, irasional, dan persisten terhadap objek atau situasi tertentu yang memicu respons kecemasan segera dan tidak proporsional terhadap bahaya nyata.", symptoms: ["Rasa takut intens yang segera saat berhadapan dengan pemicu", "Serangan panik (jantung berdebar, sesak napas, gemetar)", "Penghindaran aktif terhadap situasi atau objek yang ditakuti", "Menyadari ketakutan tidak rasional tapi tidak bisa menghentikannya", "Gangguan signifikan pada pekerjaan atau kehidupan sosial"], stats: [{num:"12.5%", label:"Populasi Seumur Hidup"},{num:"2x", label:"Lebih Umum pada Wanita"},{num:"200+", label:"Jenis Fobia"},{num:"90%", label:"Sembuh dgn Exposure"}], emoji: "😨", helpText: "Exposure Therapy (terpapar stimulus secara bertahap) adalah terapi paling efektif — tingkat kesembuhan mencapai 90% dalam waktu singkat." },
+  { id: "elimination", tab: "Gangg. Eliminasi", name: "Elimination Disorders", nameId: "Gangguan Eliminasi", desc: "Gangguan yang ditandai pengeluaran feses atau urin secara tidak tepat (di tempat yang tidak sesuai secara sosial). Meliputi Enuresis (mengompol) dan Encopresis (buang air besar tidak pada tempatnya).", symptoms: ["Mengompol berulang (Enuresis) pada anak usia ≥5 tahun", "BAB di celana atau tempat tidak tepat (Encopresis) pada anak ≥4 tahun", "Bisa terjadi saat tidur (nocturnal) atau saat terjaga", "Distres signifikan pada anak atau gangguan fungsi sosial", "Sering berkaitan dengan stres psikologis atau masalah fisik"], stats: [{num:"5-10%", label:"Anak Usia 5 Thn"},{num:"1%", label:"Remaja"},{num:"Lebih Umum", label:"Pada Anak Laki-laki"},{num:"75%", label:"Sembuh dgn Terapi"}], emoji: "💧", helpText: "Pendekatan perilaku (alarm enuresis, jadwal toilet) sangat efektif. Penting mengesampingkan penyebab medis terlebih dahulu." },
+  { id: "gender", tab: "Disforia Gender", name: "Gender Dysphoria", nameId: "Disforia Gender", desc: "Distres signifikan yang dialami seseorang karena ketidaksesuaian antara identitas gender yang dirasakannya dengan jenis kelamin yang ditentukan saat lahir.", symptoms: ["Keinginan kuat untuk menjadi gender lain", "Distres signifikan terkait karakteristik seksual primer/sekunder", "Keinginan kuat agar orang lain memperlakukan diri sebagai gender lain", "Keyakinan kuat memiliki perasaan dan reaksi seperti gender lain", "Gangguan signifikan dalam fungsi sosial dan pekerjaan"], stats: [{num:"0.5-1.3%", label:"Populasi"},{num:"Meningkat", label:"Kesadaran Diagnosis"},{num:"Penting", label:"Dukungan Keluarga"},{num:"Tinggi", label:"Komorbid Ansietas/Depresi"}], emoji: "🌈", helpText: "Terapi afirmatif gender, dukungan keluarga dan sosial, serta akses layanan kesehatan yang inklusif adalah kunci kesejahteraan." },
+  { id: "personality", tab: "Gangg. Kepribadian", name: "Personality Disorders", nameId: "Gangguan Kepribadian (Umum)", desc: "Pola pengalaman batin dan perilaku yang pervasif, tidak fleksibel, dan menyimpang dari ekspektasi budaya. Terbagi dalam 3 klaster: A (eksentrik), B (dramatis), dan C (pencemas).", symptoms: ["Pola pikir dan persepsi diri yang sangat kaku", "Kesulitan signifikan dalam relasi interpersonal", "Regulasi emosi yang buruk dan konsisten", "Impulsivitas atau perilaku yang mengganggu", "Mulai dari masa remaja dan stabil seiring waktu"], stats: [{num:"9-15%", label:"Populasi"},{num:"10 Jenis", label:"DSM-5"},{num:"Sulit", label:"Didiagnosis"},{num:"Mungkin", label:"Dengan Terapi Intensif"}], emoji: "🎭", helpText: "Schema Therapy dan DBT adalah pendekatan paling efektif. Terapi jangka panjang diperlukan karena sifatnya yang pervasif." },
+  { id: "impulse", tab: "Kontrol Impuls", name: "Impulse Control Disorders", nameId: "Gangguan Kontrol Impuls", desc: "Ketidakmampuan menahan dorongan, impuls, atau godaan untuk melakukan tindakan yang merugikan diri sendiri atau orang lain. Meliputi Kleptomania, Piromania, dan Intermittent Explosive Disorder.", symptoms: ["Ketegangan atau gairah meningkat sebelum melakukan tindakan", "Kesenangan, kepuasan, atau kelegaan saat melakukan tindakan", "Rasa bersalah atau penyesalan setelahnya", "Dorongan berulang yang sulit atau tidak bisa ditahan", "Menyebabkan masalah hukum, sosial, atau finansial signifikan"], stats: [{num:"4-6%", label:"Populasi"},{num:"Lebih Umum", label:"Pada Pria"},{num:"Sering", label:"Komorbid Bipolar"},{num:"Bisa", label:"Diobati dgn CBT"}], emoji: "💥", helpText: "CBT untuk mengenali pemicu dan mengembangkan strategi koping. Obat-obatan tertentu bisa membantu mengurangi intensitas dorongan." },
+  { id: "paraphilia", tab: "Parafilia", name: "Paraphilic Disorders", nameId: "Gangguan Parafilia", desc: "Ketertarikan seksual intens dan persisten pada objek, situasi, atau individu yang tidak umum (seperti anak-anak, benda mati, atau penderitaan). Menjadi 'gangguan' jika menyebabkan distres atau membahayakan orang lain.", symptoms: ["Fantasi, dorongan, atau perilaku seksual intens yang berulang", "Berlangsung setidaknya 6 bulan", "Menyebabkan distres klinis signifikan atau gangguan fungsi", "Dapat melibatkan tindakan yang melanggar hukum", "Berbeda dari preferensi seksual normal yang konsensual"], stats: [{num:"Beragam", label:"Prevalensi"},{num:"Lebih Umum", label:"Pada Pria"},{num:"Perlu", label:"Asesmen Profesional"},{num:"Mungkin", label:"Dikelola"}], emoji: "🔒", helpText: "Terapi kognitif-perilaku dan, dalam beberapa kasus, terapi hormonal. Prioritas utama adalah keselamatan individu dan orang lain." },
+  { id: "cognitive", tab: "Gangg. Kognitif", name: "Cognitive & Developmental Disorders", nameId: "Gangguan Kognitif & Perkembangan", desc: "Kelompok kondisi yang memengaruhi kemampuan kognitif, memori, atau perkembangan. Meliputi Demensia, Delirium, Gangguan Belajar, dan Disabilitas Intelektual.", symptoms: ["Penurunan signifikan dalam memori, perhatian, atau bahasa", "Kehilangan kemampuan kognitif yang sebelumnya dimiliki (Demensia)", "Kesulitan belajar membaca (Disleksia) atau berhitung (Diskalkuli)", "Keterlambatan perkembangan signifikan pada anak", "Gangguan orientasi terhadap waktu, tempat, atau orang (Delirium)"], stats: [{num:"55M", label:"Kasus Demensia"},{num:"Setiap 3 Detik", label:"Kasus Baru Demensia"},{num:"15-20%", label:"Gangguan Belajar"},{num:"1%", label:"Disabilitas Intelektual"}], emoji: "🧠", helpText: "Pendekatan multidisiplin: terapi kognitif, dukungan pendidikan khusus, dan perawatan medis disesuaikan dengan jenis gangguannya." },
+  { id: "sexual", tab: "Disfungsi Seksual", name: "Sexual Dysfunction", nameId: "Gangguan Disfungsi Seksual", desc: "Gangguan yang menandai masalah signifikan dalam kemampuan merespons secara seksual atau merasakan kesenangan seksual, termasuk gangguan hasrat, gairah, orgasme, atau nyeri.", symptoms: ["Hasrat seksual yang sangat rendah atau tidak ada (HSDD)", "Kesulitan mencapai atau mempertahankan ereksi/lubrikasi", "Ketidakmampuan mencapai orgasme meski stimulasi cukup", "Nyeri signifikan saat atau setelah aktivitas seksual", "Distres signifikan atau kesulitan interpersonal akibat masalah ini"], stats: [{num:"31%", label:"Pria Terdampak"},{num:"43%", label:"Wanita Terdampak"},{num:"Meningkat", label:"Dgn Usia"},{num:"80%", label:"Responsif terhadap Terapi"}], emoji: "💙", helpText: "Pendekatan biopsikososial: mengecek faktor medis, terapi seks, konseling pasangan, dan mengatasi kecemasan performa." },
 ];
+
 
 const MOODS = [
   { emoji: "🤩", label: "Luar Biasa", activities: ["Gunakan energimu untuk proyek kreatif", "Hubungi dan tularkan semangat ke temanmu", "Rayakan harimu dengan traktiran kecil"] },
@@ -1889,6 +2098,27 @@ $$('.mobile-nav-link').forEach(a => {
 });
 
 $('#back-to-top').addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+// ============================================================
+// DARK MODE TOGGLE
+// ============================================================
+(function initDarkMode() {
+  const html = document.documentElement;
+  const btn = $('#dark-toggle');
+  const saved = localStorage.getItem('psyrofories-theme') || 'light';
+  if (saved === 'dark') html.setAttribute('data-theme', 'dark');
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      html.removeAttribute('data-theme');
+      localStorage.setItem('psyrofories-theme', 'light');
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      localStorage.setItem('psyrofories-theme', 'dark');
+    }
+  });
+})();
 
 // Scroll Reveal
 const revealObserver = new IntersectionObserver((entries) => {
